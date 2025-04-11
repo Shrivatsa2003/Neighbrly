@@ -2,8 +2,7 @@ package com.projects.Neighbrly.Neighbrly.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,10 +13,13 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(
         uniqueConstraints = @UniqueConstraint(
                 name = "unique_hotel_room_date",
-                columnNames = {"hotel_id", "room_id", "date"}
+                columnNames = {"hotel_id", "room_id","date"}
         ))
 public class Inventory {
 
