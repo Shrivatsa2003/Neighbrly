@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +32,14 @@ public class HotelController {
         HotelDto hotel = hotelService.getHotelById(hotelId);
         return ResponseEntity.ok(hotel);
     }
+
+    @GetMapping("")
+    public  ResponseEntity<List<HotelDto>> getAllHotels(){
+        log.info("getting all the hotels");
+        List<HotelDto> hotels = hotelService.getAllHotels();
+        return ResponseEntity.ok(hotels);
+    }
+
 
     @PutMapping("/{hotelId}")
     public ResponseEntity<HotelDto> updateHotelById(@PathVariable Long hotelId,@RequestBody HotelDto hotelDto){

@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Payment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,4 +34,7 @@ public class Payment {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Booking booking;
 }

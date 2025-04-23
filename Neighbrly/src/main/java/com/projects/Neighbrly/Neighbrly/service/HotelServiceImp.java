@@ -1,17 +1,20 @@
 package com.projects.Neighbrly.Neighbrly.service;
-
 import com.projects.Neighbrly.Neighbrly.Exception.resourceNotFound;
 import com.projects.Neighbrly.Neighbrly.dto.HotelDto;
+import com.projects.Neighbrly.Neighbrly.dto.HotelInfoDto;
+import com.projects.Neighbrly.Neighbrly.dto.RoomDto;
 import com.projects.Neighbrly.Neighbrly.entity.Hotel;
 import com.projects.Neighbrly.Neighbrly.entity.Room;
 import com.projects.Neighbrly.Neighbrly.repository.HotelRepository;
-import com.projects.Neighbrly.Neighbrly.repository.InventoryRepository;
 import com.projects.Neighbrly.Neighbrly.repository.RoomRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -53,6 +56,15 @@ public class HotelServiceImp implements HotelService {
         return modelMapper.map(hotelRepository.save(hotel),HotelDto.class);
     }
 
+    @Override
+    public List<HotelDto> getAllHotels() {
+        return hotelRepository
+                .findAll()
+                .stream()
+                .map((element)->modelMapper.map(element,HotelDto.class))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     @Override
     public void deleteHotelById(Long Id) {
@@ -88,5 +100,19 @@ public class HotelServiceImp implements HotelService {
         }
 
 
+    }
+
+    @Override
+    public HotelInfoDto getHotelInfoById(Long hotelId) {
+        Hotel hotel = hotelRepository
+                .findById(hotelId)
+                .orElseThrow(() -> new resourceNotFound("Could not find any hotel with the Id " + hotelId));
+
+        List<RoomDto> rooms = hotel.getRooms()
+                .stream()
+                .map((element) -> modelMapper.map(element, RoomDto.class))
+                .toList();
+
+        return new HotelInfoDto(modelMapper.map(hotel, HotelDto.class), rooms);
     }
 }
