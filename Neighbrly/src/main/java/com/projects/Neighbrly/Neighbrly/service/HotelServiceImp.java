@@ -1,5 +1,5 @@
 package com.projects.Neighbrly.Neighbrly.service;
-import com.projects.Neighbrly.Neighbrly.Exception.resourceNotFound;
+import com.projects.Neighbrly.Neighbrly.Exception.ResourceNotFoundException;
 import com.projects.Neighbrly.Neighbrly.dto.HotelDto;
 import com.projects.Neighbrly.Neighbrly.dto.HotelInfoDto;
 import com.projects.Neighbrly.Neighbrly.dto.RoomDto;
@@ -41,7 +41,7 @@ public class HotelServiceImp implements HotelService {
         log.info("getting hotel by id{}", Id);
         Hotel hotelEntity = hotelRepository
                 .findById(Id)
-                .orElseThrow(()->new resourceNotFound("Could not find any hotel with the Id "+Id));
+                .orElseThrow(()->new ResourceNotFoundException("Could not find any hotel with the Id "+Id));
         return modelMapper.map(hotelEntity,HotelDto.class);
 
     }
@@ -51,7 +51,7 @@ public class HotelServiceImp implements HotelService {
         log.info("getting hotel by id{}", Id);
         Hotel hotel = hotelRepository
                 .findById(Id)
-                .orElseThrow(()->new resourceNotFound("Could not find any hotel with the Id "+Id));
+                .orElseThrow(()->new ResourceNotFoundException("Could not find any hotel with the Id "+Id));
         modelMapper.map(hotelDto, hotel);
         return modelMapper.map(hotelRepository.save(hotel),HotelDto.class);
     }
@@ -70,7 +70,7 @@ public class HotelServiceImp implements HotelService {
     public void deleteHotelById(Long Id) {
         Hotel hotel = hotelRepository
                 .findById(Id)
-                .orElseThrow(() -> new resourceNotFound("Could not find any hotel with the Id " + Id));
+                .orElseThrow(() -> new ResourceNotFoundException("Could not find any hotel with the Id " + Id));
 
         log.info("deleting the inventory for this hotel");
         for (Room room : hotel.getRooms()) {
@@ -91,7 +91,7 @@ public class HotelServiceImp implements HotelService {
         log.info("activating the hotel with hotelId "+Id);
         Hotel hotel = hotelRepository
                 .findById(Id)
-                .orElseThrow(()->new resourceNotFound("Could not find any hotel with the Id "+Id));
+                .orElseThrow(()->new ResourceNotFoundException("Could not find any hotel with the Id "+Id));
 
         log.info("creating inventories for the rooms of this hotel");
         hotel.setActive(true);
@@ -106,7 +106,7 @@ public class HotelServiceImp implements HotelService {
     public HotelInfoDto getHotelInfoById(Long hotelId) {
         Hotel hotel = hotelRepository
                 .findById(hotelId)
-                .orElseThrow(() -> new resourceNotFound("Could not find any hotel with the Id " + hotelId));
+                .orElseThrow(() -> new ResourceNotFoundException("Could not find any hotel with the Id " + hotelId));
 
         List<RoomDto> rooms = hotel.getRooms()
                 .stream()

@@ -10,4 +10,5 @@ import java.util.List;
 public interface BookingService {
     BookingDto initialiseBooking(BookingRequestDto bookingRequestDto);
     BookingDto addGuests(Long bookingId, List<GuestDto> guests);
+    String initiatePayments(Long bookingId);
 }

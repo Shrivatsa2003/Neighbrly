@@ -1,25 +1,28 @@
 package com.projects.Neighbrly.Neighbrly.Advice;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
-public class apiResponse<T> {
+@Getter
+@Setter
+@AllArgsConstructor
+
+public class ApiResponse<T> {
 
     private LocalDateTime localDateTime;
     private T data;
     private ApiError apiError;
 
-    public apiResponse(){
+    public ApiResponse(){
         this.localDateTime = LocalDateTime.now();
     }
-    public apiResponse(T data){
+    public ApiResponse(T data){
         this();
         this.data = data;
     }
-    public apiResponse(ApiError apiError){
+    public ApiResponse(ApiError apiError){
         this();
         this.apiError=apiError;
     }

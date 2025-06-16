@@ -1,6 +1,6 @@
 package com.projects.Neighbrly.Neighbrly.service;
 
-import com.projects.Neighbrly.Neighbrly.Exception.resourceNotFound;
+import com.projects.Neighbrly.Neighbrly.Exception.ResourceNotFoundException;
 import com.projects.Neighbrly.Neighbrly.dto.RoomDto;
 import com.projects.Neighbrly.Neighbrly.entity.Hotel;
 import com.projects.Neighbrly.Neighbrly.entity.Room;
@@ -10,10 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
 
-import javax.swing.event.ListDataEvent;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -32,7 +30,7 @@ public class RoomServiceImp implements  RoomService{
         log.info("creating a new room in the hotel{}",hotelId);
         Hotel hotel = hotelRepository
                 .findById(hotelId)
-                .orElseThrow(()->  new resourceNotFound("could not find the hotel with id"+hotelId));
+                .orElseThrow(()->  new ResourceNotFoundException("could not find the hotel with id"+hotelId));
         Room room = modelMapper.map(roomDto, Room.class);
         room.setHotel(hotel);
         room = roomRepository.save(room);
@@ -50,7 +48,7 @@ public class RoomServiceImp implements  RoomService{
         log.info("getting all rooms in hotel id : "+hotelId);
         Hotel hotel = hotelRepository
                 .findById(hotelId)
-                .orElseThrow(()->  new resourceNotFound("could not find the hotel with id"+hotelId));
+                .orElseThrow(()->  new ResourceNotFoundException("could not find the hotel with id"+hotelId));
 
         return hotel.getRooms()
                 .stream()
@@ -67,14 +65,14 @@ public class RoomServiceImp implements  RoomService{
         // check if the user  is providing valid hotel
         Hotel hotel = hotelRepository
                 .findById(hotelId)
-                .orElseThrow(()->  new resourceNotFound("could not find the hotel with id"+hotelId));
+                .orElseThrow(()->  new ResourceNotFoundException("could not find the hotel with id"+hotelId));
 
         Room room = roomRepository
                 .findById(roomId)
-                .orElseThrow(()-> new resourceNotFound("could not find a room with id"+roomId));
+                .orElseThrow(()-> new ResourceNotFoundException("could not find a room with id"+roomId));
 
         //check if room provided in dto exists in that hotel itself
-        if(!Objects.equals(room.getHotel().getId(), hotelId)) throw  new resourceNotFound("could not find room Id "+roomId+ " in hotel with hotel Id "+hotelId);
+        if(!Objects.equals(room.getHotel().getId(), hotelId)) throw  new ResourceNotFoundException("could not find room Id "+roomId+ " in hotel with hotel Id "+hotelId);
         return modelMapper.map(room,RoomDto.class);
     }
 
@@ -84,7 +82,7 @@ public class RoomServiceImp implements  RoomService{
         log.info("deleting room with id{}",roomId);
         Room room = roomRepository
                 .findById(roomId)
-                .orElseThrow(()-> new resourceNotFound("could not find a room with id"+roomId));
+                .orElseThrow(()-> new ResourceNotFoundException("could not find a room with id"+roomId));
         inventoryService.deleteFutureInventory(room);
 
         roomRepository.delete(room);

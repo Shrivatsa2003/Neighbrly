@@ -1,6 +1,7 @@
 package com.projects.Neighbrly.Neighbrly.security;
 
 import com.projects.Neighbrly.Neighbrly.entity.User;
+import com.projects.Neighbrly.Neighbrly.service.UserServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ import java.io.IOException;
 public  class JwtFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @Autowired
     @Qualifier("handlerExceptionResolver")
@@ -47,7 +48,7 @@ public  class JwtFilter extends OncePerRequestFilter {
                 User user = userService.getUserById(userId);
 
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(user, null, null);
+                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
                 authenticationToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)

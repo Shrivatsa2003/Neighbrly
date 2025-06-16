@@ -31,9 +31,9 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/v1/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/admin/**").hasRole("HOTEL_MANAGER")
+                        .requestMatchers("/bookings/**").authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -43,6 +43,11 @@ public class WebSecurityConfig {
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/booking")
@@ -29,6 +30,12 @@ public class BookingController {
     public ResponseEntity<BookingDto> addGuests(@PathVariable Long bookingId ,@RequestBody List<GuestDto> guests){
         System.out.println("Received POST /booking/" + bookingId + "/addGuests");
         return  ResponseEntity.ok(bookingServiceImp.addGuests(bookingId,guests));
+    }
+
+    @PostMapping("/{bookingId}/payment")
+    public ResponseEntity<Map<String,String>> initiatePayment(@PathVariable Long bookingId ){
+        String sessionUrl =  bookingServiceImp.initiatePayments(bookingId);
+        return  ResponseEntity.ok(Map.of("Session_Url",sessionUrl));
     }
 
 }
