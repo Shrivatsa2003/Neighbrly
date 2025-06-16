@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+
+## Ignore application secrets
+#src/main/resources/application.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -31,3 +35,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
