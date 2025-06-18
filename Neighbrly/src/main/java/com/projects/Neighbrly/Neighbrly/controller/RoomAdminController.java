@@ -2,6 +2,7 @@ package com.projects.Neighbrly.Neighbrly.controller;
 
 import com.projects.Neighbrly.Neighbrly.dto.RoomDto;
 import com.projects.Neighbrly.Neighbrly.service.RoomService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,13 @@ public class RoomAdminController {
     public ResponseEntity<Void> deleteRoomById(@PathVariable Long roomId){
         roomService.deleteRoomById(roomId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{roomId}")
+    @Operation(summary = "Update a room", tags = {"Admin Inventory"})
+    public ResponseEntity<RoomDto> updateRoomById(@PathVariable Long hotelId, @PathVariable Long roomId,
+                                                  @RequestBody RoomDto roomDto) {
+        return ResponseEntity.ok(roomService.updateRoomById(hotelId, roomId, roomDto));
     }
 
 }

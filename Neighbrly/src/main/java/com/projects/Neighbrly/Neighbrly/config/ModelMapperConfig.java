@@ -13,9 +13,9 @@ public class ModelMapperConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        ModelMapper mapper = new ModelMapper();
-
-        return mapper;
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setPropertyCondition(context -> context.getSource() != null);
+        return modelMapper;
     }
 
 }

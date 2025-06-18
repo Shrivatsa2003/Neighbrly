@@ -1,14 +1,18 @@
 package com.projects.Neighbrly.Neighbrly.controller;
 
 import com.projects.Neighbrly.Neighbrly.dto.HotelDto;
+import com.projects.Neighbrly.Neighbrly.dto.HotelReportDto;
 import com.projects.Neighbrly.Neighbrly.entity.Hotel;
+import com.projects.Neighbrly.Neighbrly.service.BookingServiceImp;
 import com.projects.Neighbrly.Neighbrly.service.HotelService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -18,6 +22,7 @@ import java.util.List;
 public class HotelController {
 
     private final HotelService hotelService;
+    private final BookingServiceImp bookingServiceImp;
 
     @PostMapping
     public ResponseEntity<HotelDto> createNewHotel(@RequestBody HotelDto hotelDto){
@@ -33,12 +38,7 @@ public class HotelController {
         return ResponseEntity.ok(hotel);
     }
 
-    @GetMapping("")
-    public  ResponseEntity<List<HotelDto>> getAllHotels(){
-        log.info("getting all the hotels");
-        List<HotelDto> hotels = hotelService.getAllHotels();
-        return ResponseEntity.ok(hotels);
-    }
+
 
 
     @PutMapping("/{hotelId}")
@@ -58,6 +58,23 @@ public class HotelController {
     public  ResponseEntity<Void> activateHotel(@PathVariable Long hotelId){
         hotelService.activateHotel(hotelId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<HotelDto>> getAllHotels(){
+        return ResponseEntity.ok(hotelService.getAllHotels());
+    }
+
+    @GetMapping("/{hotelId}/reports")
+    @Operation(summary = "Generate a bookings report of a hotel", tags = {"Admin Bookings"})
+    public ResponseEntity<HotelReportDto> getHotelReport(@PathVariable Long hotelId,
+                                                         @RequestParam(required = false) LocalDate startDate,
+                                                         @RequestParam(required = false) LocalDate endDate) {
+
+        if (startDate == null) startDate = LocalDate.now().minusMonths(1);
+        if (endDate == null) endDate = LocalDate.now();
+
+        return ResponseEntity.ok(bookingServiceImp.getHotelReport(hotelId, startDate, endDate));
     }
 
 }

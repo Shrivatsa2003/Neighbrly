@@ -5,6 +5,7 @@ import com.projects.Neighbrly.Neighbrly.dto.HotelInfoDto;
 import com.projects.Neighbrly.Neighbrly.dto.RoomDto;
 import com.projects.Neighbrly.Neighbrly.entity.Hotel;
 import com.projects.Neighbrly.Neighbrly.entity.Room;
+import com.projects.Neighbrly.Neighbrly.entity.User;
 import com.projects.Neighbrly.Neighbrly.repository.HotelRepository;
 import com.projects.Neighbrly.Neighbrly.repository.RoomRepository;
 import jakarta.transaction.Transactional;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.projects.Neighbrly.Neighbrly.utils.userUtil.getCurrentUser;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +33,8 @@ public class HotelServiceImp implements HotelService {
         log.info("creating a new hotel with name {}",hotelDto.getName());
         Hotel hotelEntity = modelMapper.map(hotelDto,Hotel.class);
         hotelEntity.setActive(false);
+        User user = getCurrentUser();
+        hotelEntity.setOwner(user);
          hotelEntity = hotelRepository.save(hotelEntity);
          return  modelMapper.map(hotelEntity,HotelDto.class);
 
@@ -52,15 +57,19 @@ public class HotelServiceImp implements HotelService {
                 .findById(Id)
                 .orElseThrow(()->new ResourceNotFoundException("Could not find any hotel with the Id "+Id));
         modelMapper.map(hotelDto, hotel);
+        hotel.setId(Id);
         return modelMapper.map(hotelRepository.save(hotel),HotelDto.class);
     }
 
     @Override
     public List<HotelDto> getAllHotels() {
-        return hotelRepository
-                .findAll()
+
+        User user = getCurrentUser();
+        List<Hotel> hotels = hotelRepository.findByOwner(user);
+
+        return hotels
                 .stream()
-                .map((element)->modelMapper.map(element,HotelDto.class))
+                .map(hotel -> modelMapper.map(hotel,HotelDto.class))
                 .collect(Collectors.toList());
     }
 

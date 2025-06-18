@@ -1,10 +1,14 @@
 package com.projects.Neighbrly.Neighbrly.service;
 
 import com.projects.Neighbrly.Neighbrly.Exception.ResourceNotFoundException;
+import com.projects.Neighbrly.Neighbrly.Exception.UnAuthorisedException;
 import com.projects.Neighbrly.Neighbrly.dto.RoomDto;
 import com.projects.Neighbrly.Neighbrly.entity.Hotel;
+import com.projects.Neighbrly.Neighbrly.entity.Inventory;
 import com.projects.Neighbrly.Neighbrly.entity.Room;
+import com.projects.Neighbrly.Neighbrly.entity.User;
 import com.projects.Neighbrly.Neighbrly.repository.HotelRepository;
+import com.projects.Neighbrly.Neighbrly.repository.InventoryRepository;
 import com.projects.Neighbrly.Neighbrly.repository.RoomRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.projects.Neighbrly.Neighbrly.utils.userUtil.getCurrentUser;
 
 @Slf4j
 @Service
@@ -24,6 +31,7 @@ public class RoomServiceImp implements  RoomService{
     private final ModelMapper modelMapper;
     private final HotelRepository hotelRepository;
     private final InventoryService inventoryService;
+    private final InventoryRepository inventoryRepository;
 
     @Override
     public RoomDto createNewRoom(Long hotelId, RoomDto roomDto) {
@@ -86,5 +94,35 @@ public class RoomServiceImp implements  RoomService{
         inventoryService.deleteFutureInventory(room);
 
         roomRepository.delete(room);
+    }
+
+    @Override
+    @Transactional
+    public RoomDto updateRoomById(Long hotelId, Long roomId, RoomDto roomDto) {
+        log.info("Updating the room with ID: {}", roomId);
+        Hotel hotel = hotelRepository
+                .findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID: "+hotelId));
+
+        User user = getCurrentUser();
+        if(!user.equals(hotel.getOwner())) {
+            throw new UnAuthorisedException("This user does not own this hotel with id: "+hotelId);
+        }
+
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID: "+roomId));
+
+       if(!Objects.equals(room.getTotalCount(), roomDto.getTotalCount())){
+           List<Inventory> inventoryList = inventoryRepository.findByRoom(room);
+           inventoryList.forEach(inventory -> inventory.setTotalCount(roomDto.getTotalCount()));
+           inventoryRepository.saveAll(inventoryList);
+       }
+        modelMapper.map(roomDto, room);
+
+        room.setId(roomId);
+
+        room = roomRepository.save(room);
+
+        return modelMapper.map(room, RoomDto.class);
     }
 }

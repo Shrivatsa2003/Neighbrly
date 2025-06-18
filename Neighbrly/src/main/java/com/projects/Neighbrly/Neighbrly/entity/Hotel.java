@@ -38,6 +38,9 @@ public class Hotel {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Column(nullable = true)
+    private User owner;
+
     @Embedded
     private HotelContactInfo contactInfo;
 

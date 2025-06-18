@@ -5,6 +5,7 @@ import com.projects.Neighbrly.Neighbrly.dto.BookingRequestDto;
 import com.projects.Neighbrly.Neighbrly.dto.GuestDto;
 import com.projects.Neighbrly.Neighbrly.service.BookingService;
 import com.projects.Neighbrly.Neighbrly.service.BookingServiceImp;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,9 +28,9 @@ public class BookingController {
     }
 
     @PostMapping("/{bookingId}/addGuests")
-    public ResponseEntity<BookingDto> addGuests(@PathVariable Long bookingId ,@RequestBody List<GuestDto> guests){
-        System.out.println("Received POST /booking/" + bookingId + "/addGuests");
-        return  ResponseEntity.ok(bookingServiceImp.addGuests(bookingId,guests));
+    public ResponseEntity<BookingDto> addGuests(@PathVariable Long bookingId,
+                                                @RequestBody List<Long> guestIdList) {
+        return ResponseEntity.ok(bookingServiceImp.addGuests(bookingId, guestIdList));
     }
 
     @PostMapping("/{bookingId}/payment")
@@ -42,6 +43,11 @@ public class BookingController {
     public ResponseEntity<Void> cancelBooking(@PathVariable Long bookingId ){
             bookingServiceImp.cancelBooking(bookingId);
           return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/bookings/{bookingId}")
+    public ResponseEntity<List<BookingDto>> getAllBookingsByHotelId(@PathVariable Long hotelId){
+        return ResponseEntity.ok(bookingServiceImp.getAllBookingsByHotelId(hotelId));
     }
 
 }
