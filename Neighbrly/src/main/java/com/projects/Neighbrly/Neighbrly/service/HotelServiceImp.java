@@ -31,7 +31,6 @@ public class HotelServiceImp implements HotelService {
         Hotel hotelEntity = modelMapper.map(hotelDto,Hotel.class);
         hotelEntity.setActive(false);
          hotelEntity = hotelRepository.save(hotelEntity);
-        log.info("creating a new hotel with Id "+hotelDto.getId());
          return  modelMapper.map(hotelEntity,HotelDto.class);
 
     }

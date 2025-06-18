@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,6 +25,13 @@ public class PricingCalculator {
 
         return pricingStrategy.calculatePrice(inventory);
 
+    }
+
+
+    public BigDecimal calculatePricingPerDay(List<Inventory> inventoryList){
+        return inventoryList.stream()
+                .map(this::calculateDynamicPricing)
+                .reduce(BigDecimal.ZERO,BigDecimal::add);
     }
 
 }

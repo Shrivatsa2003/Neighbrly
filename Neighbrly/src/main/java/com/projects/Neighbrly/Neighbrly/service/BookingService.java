@@ -5,10 +5,16 @@ import com.projects.Neighbrly.Neighbrly.dto.BookingRequestDto;
 import com.projects.Neighbrly.Neighbrly.dto.GuestDto;
 import com.projects.Neighbrly.Neighbrly.entity.Guest;
 
+import com.stripe.model.Event;
+
 import java.util.List;
 
 public interface BookingService {
     BookingDto initialiseBooking(BookingRequestDto bookingRequestDto);
     BookingDto addGuests(Long bookingId, List<GuestDto> guests);
     String initiatePayments(Long bookingId);
+
+
+    void capturePayment(Event event);
+    void cancelBooking(Long bookingId);
 }

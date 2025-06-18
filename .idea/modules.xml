@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/Neighbrly.iml" filepath="$PROJECT_DIR$/.idea/Neighbrly.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/Neighbrly/Neighbrly.iml" filepath="$PROJECT_DIR$/Neighbrly/Neighbrly.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Neighbrly-main.iml" filepath="$PROJECT_DIR$/.idea/Neighbrly-main.iml" />
+>>>>>>> ddaa76d (added capture payments and dynamic price for init booking)
     </modules>
   </component>
 </project>
