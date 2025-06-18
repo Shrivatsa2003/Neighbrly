@@ -15,19 +15,6 @@ public class ModelMapperConfig {
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
 
-        // Skip mapping the ID from DTO to Entity to avoid identifier mutation
-        mapper.typeMap(HotelDto.class, Hotel.class)
-                .addMappings(m -> m.skip(Hotel::setId));
-
-        mapper.typeMap(Booking.class, BookingDto.class)
-                .addMappings(m -> {
-            m.map(src -> src.getHotel().getId(), BookingDto::setHotelId);
-            m.map(src -> src.getHotel().getName(), BookingDto::setHotelName);
-            m.map(src -> src.getRoom().getId(), BookingDto::setRoomId);
-            m.map(src -> src.getRoom().getType(), BookingDto::setRoomName);
-            m.map(src -> src.getUser().getId(), BookingDto::setUserId);
-        });
-
         return mapper;
     }
 

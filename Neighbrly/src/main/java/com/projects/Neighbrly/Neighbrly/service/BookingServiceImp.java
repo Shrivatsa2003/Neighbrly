@@ -72,15 +72,6 @@ public class BookingServiceImp implements BookingService {
             throw  new IllegalStateException("room is not available anymore");
         }
         //reserve the room/update the bookedCount
-        for(Inventory inventory:inventoryList){
-            inventory.setReservedCount(inventory.getReservedCount()+bookingRequestDto.getRoomsCount());
-        }
-
-        inventoryRepository.saveAll(inventoryList);
-
-
-
-
         inventoryRepository.initBooking(room.getId(),bookingRequestDto.getCheckInDate(),bookingRequestDto.getCheckOutDate(),bookingRequestDto.getRoomsCount());
         BigDecimal pricePerDay =pricingCalculator.calculatePricingPerDay(inventoryList);
         BigDecimal totalPrice = pricePerDay.multiply(BigDecimal.valueOf(bookingRequestDto.getRoomsCount()));
@@ -135,7 +126,8 @@ public class BookingServiceImp implements BookingService {
                 () -> new ResourceNotFoundException("Booking not found with id: "+bookingId)
         );
         User user = getCurrentUser();
-        if (!user.equals(booking.getUser())) {
+
+        if (!user.getId().equals(booking.getUser().getId())){
             throw new UnAuthorisedException("Booking does not belong to this user with id: "+user.getId());
         }
         if (hasBookingExpired(booking)) {
@@ -185,6 +177,7 @@ public class BookingServiceImp implements BookingService {
     }
 
     @Override
+    @Transactional
     public void cancelBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(()-> new ResourceNotFoundException("Booking with {} bookingId not found"+bookingId));
         User user = getCurrentUser();
