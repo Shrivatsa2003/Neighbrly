@@ -38,7 +38,7 @@ public class Hotel {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column(nullable = true)
+    @ManyToOne(optional = false)
     private User owner;
 
     @Embedded

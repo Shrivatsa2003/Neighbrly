@@ -6,6 +6,7 @@ import com.projects.Neighbrly.Neighbrly.dto.LoginResponseDto;
 import com.projects.Neighbrly.Neighbrly.dto.SignupDto;
 import com.projects.Neighbrly.Neighbrly.dto.UserDto;
 import com.projects.Neighbrly.Neighbrly.security.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,11 +32,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signUp")
+    @Operation(summary = "Create a new account", tags = {"Auth"})
     public ResponseEntity<UserDto> signUp (@RequestBody SignupDto signupDto){
         return new ResponseEntity<>(authService.signUp(signupDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Login request", tags = {"Auth"})
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse){
         String[] tokens = authService.login(loginDto);
 
@@ -46,6 +49,7 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDto(tokens[0]));
     }
     @PostMapping("/refresh")
+    @Operation(summary = "Refresh the JWT with a refresh token", tags = {"Auth"})
     public ResponseEntity<LoginResponseDto> refresh(HttpServletRequest request) {
         String refreshToken = Arrays.stream(request.getCookies()).
                 filter(cookie -> "refreshToken".equals(cookie.getName()))

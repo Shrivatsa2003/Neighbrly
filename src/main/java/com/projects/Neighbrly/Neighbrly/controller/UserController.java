@@ -1,13 +1,11 @@
 package com.projects.Neighbrly.Neighbrly.controller;
 
 
-import com.projects.Neighbrly.Neighbrly.dto.BookingDto;
 import com.projects.Neighbrly.Neighbrly.dto.GuestDto;
 import com.projects.Neighbrly.Neighbrly.dto.ProfileUpdateRequestDto;
 import com.projects.Neighbrly.Neighbrly.dto.UserDto;
 import com.projects.Neighbrly.Neighbrly.service.BookingServiceImp;
 import com.projects.Neighbrly.Neighbrly.service.GuestServiceImpl;
-import com.projects.Neighbrly.Neighbrly.service.UserService;
 import com.projects.Neighbrly.Neighbrly.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

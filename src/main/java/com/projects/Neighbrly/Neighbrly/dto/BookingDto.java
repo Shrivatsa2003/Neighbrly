@@ -22,7 +22,6 @@ public class BookingDto {
     private Long hotelId;
     private String hotelName;
     private Long roomId;
-    private String roomName;
     private String roomType;
     private Long userId;
     private LocalDate checkInDate;

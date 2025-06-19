@@ -23,31 +23,32 @@ public class BookingController {
     private final BookingServiceImp bookingServiceImp;
 
     @PostMapping("/init")
+    @Operation(summary = "Initiate the booking", tags = {"Booking Flow"})
     public ResponseEntity<BookingDto> initialiseBooking(@RequestBody BookingRequestDto bookingRequestDto){
         return ResponseEntity.ok(bookingServiceImp.initialiseBooking(bookingRequestDto));
     }
 
     @PostMapping("/{bookingId}/addGuests")
+    @Operation(summary = "Add guest Ids to the booking", tags = {"Booking Flow"})
     public ResponseEntity<BookingDto> addGuests(@PathVariable Long bookingId,
                                                 @RequestBody List<Long> guestIdList) {
         return ResponseEntity.ok(bookingServiceImp.addGuests(bookingId, guestIdList));
     }
 
     @PostMapping("/{bookingId}/payment")
+    @Operation(summary = "Initiate payments flow for the booking", tags = {"Booking Flow"})
     public ResponseEntity<Map<String,String>> initiatePayment(@PathVariable Long bookingId ){
         String sessionUrl =  bookingServiceImp.initiatePayments(bookingId);
         return  ResponseEntity.ok(Map.of("Session_Url",sessionUrl));
     }
 
     @PostMapping("/{bookingId}/cancel")
+    @Operation(summary = "Cancel the booking", tags = {"Booking Flow"})
     public ResponseEntity<Void> cancelBooking(@PathVariable Long bookingId ){
             bookingServiceImp.cancelBooking(bookingId);
           return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/bookings/{bookingId}")
-    public ResponseEntity<List<BookingDto>> getAllBookingsByHotelId(@PathVariable Long hotelId){
-        return ResponseEntity.ok(bookingServiceImp.getAllBookingsByHotelId(hotelId));
-    }
+
 
 }

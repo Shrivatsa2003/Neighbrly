@@ -3,6 +3,8 @@ package com.projects.Neighbrly.Neighbrly.repository;
 import com.projects.Neighbrly.Neighbrly.entity.Booking;
 import com.projects.Neighbrly.Neighbrly.entity.Hotel;
 import com.projects.Neighbrly.Neighbrly.entity.User;
+import com.projects.Neighbrly.Neighbrly.entity.enums.BookingStatus;
+import com.projects.Neighbrly.Neighbrly.entity.enums.PaymentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -15,4 +17,8 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     List<Booking> findByHotelAndCreatedAtBetween(Hotel hotel, LocalDateTime startDate, LocalDateTime endDate);
     List<Booking> findByHotel(Hotel hotel);
     Collection<Object> findByUser(User user);
+    List<Booking> findByBookingStatusIn(List<BookingStatus> statuses);
+
+
+
 }

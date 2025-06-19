@@ -1,5 +1,6 @@
 package com.projects.Neighbrly.Neighbrly.controller;
 
+import com.projects.Neighbrly.Neighbrly.dto.BookingDto;
 import com.projects.Neighbrly.Neighbrly.dto.HotelDto;
 import com.projects.Neighbrly.Neighbrly.dto.HotelReportDto;
 import com.projects.Neighbrly.Neighbrly.entity.Hotel;
@@ -25,13 +26,16 @@ public class HotelController {
     private final BookingServiceImp bookingServiceImp;
 
     @PostMapping
+    @Operation(summary = "Create a new hotel", tags = {"Admin Hotel"})
     public ResponseEntity<HotelDto> createNewHotel(@RequestBody HotelDto hotelDto){
         log.info("creating a hotel with body{}", hotelDto);
         HotelDto hotel = hotelService.createNewHotel(hotelDto);
+
         return  new ResponseEntity<>(hotel, HttpStatus.CREATED);
     }
 
     @GetMapping("/{hotelId}")
+    @Operation(summary = "Get a hotel by Id", tags = {"Admin Hotel"})
     public ResponseEntity<HotelDto> getHotelById(@PathVariable Long hotelId){
         log.info("getting hotel by Id{}", hotelId);
         HotelDto hotel = hotelService.getHotelById(hotelId);
@@ -42,6 +46,7 @@ public class HotelController {
 
 
     @PutMapping("/{hotelId}")
+    @Operation(summary = "Update a hotel", tags = {"Admin Hotel"})
     public ResponseEntity<HotelDto> updateHotelById(@PathVariable Long hotelId,@RequestBody HotelDto hotelDto){
         log.info("updating hotel by Id{}",hotelId);
         HotelDto hotel = hotelService.updateHotelById(hotelId,hotelDto);
@@ -49,18 +54,21 @@ public class HotelController {
     }
 
     @DeleteMapping("/{hotelId}")
+    @Operation(summary = "Delete a hotel", tags = {"Admin Hotel"})
     public ResponseEntity<Void> deleteHotelById(@PathVariable Long hotelId){
         hotelService.deleteHotelById(hotelId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{hotelId}")
+    @Operation(summary = "Activate a hotel", tags = {"Admin Hotel"})
     public  ResponseEntity<Void> activateHotel(@PathVariable Long hotelId){
         hotelService.activateHotel(hotelId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("")
+    @Operation(summary = "Get all hotels owned by admin", tags = {"Admin Hotel"})
     public ResponseEntity<List<HotelDto>> getAllHotels(){
         return ResponseEntity.ok(hotelService.getAllHotels());
     }
@@ -75,6 +83,12 @@ public class HotelController {
         if (endDate == null) endDate = LocalDate.now();
 
         return ResponseEntity.ok(bookingServiceImp.getHotelReport(hotelId, startDate, endDate));
+    }
+
+    @GetMapping("/{hotelId}/bookings")
+    @Operation(summary = "Get all bookings of a hotel", tags = {"Admin Bookings"})
+    public ResponseEntity<List<BookingDto>> getAllBookingsByHotelId(@PathVariable Long hotelId){
+        return ResponseEntity.ok(bookingServiceImp.getAllBookingsByHotelId(hotelId));
     }
 
 }

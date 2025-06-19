@@ -85,7 +85,7 @@ public class InventoryServiceImp  implements  InventoryService{
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: "+roomId));
 
         User user = getCurrentUser();
-        if(!user.equals(room.getHotel().getOwner())) throw new AccessDeniedException("You are not the owner of room with id: "+roomId);
+        if(!user.getId().equals(room.getHotel().getOwner().getId())) throw new AccessDeniedException("You are not the owner of room with id: "+roomId);
 
         return inventoryRepository.findByRoomOrderByDate(room).stream()
                 .map((element) -> modelMapper.map(element,
@@ -105,7 +105,7 @@ public class InventoryServiceImp  implements  InventoryService{
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: "+roomId));
 
         User user = getCurrentUser();
-        if(!user.equals(room.getHotel().getOwner())) throw new AccessDeniedException("You are not the owner of room with id: "+roomId);
+        if(!user.getId().equals(room.getHotel().getOwner().getId())) throw new AccessDeniedException("You are not the owner of room with id: "+roomId);
 
         inventoryRepository.getInventoryAndLockBeforeUpdate(roomId, updateInventoryRequestDto.getStartDate(),
                 updateInventoryRequestDto.getEndDate());
