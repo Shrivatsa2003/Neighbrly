@@ -175,19 +175,43 @@ Explore all APIs interactively here:
 
 ---
 
+## Prerequisites
+
+- Java  
+- PostgreSQL Database
+---
+
+
 ## 🧰 Getting Started
 
 ```bash
 git clone https://github.com/your-username/neighbrly.git
 cd neighbrly
 
-spring.datasource.url=jdbc:mysql://localhost:3306/neighbrly
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-jwt.secretKey=yourSecretKey
+# Application Name
+spring.application.name=Neighbrly
 
+# DB Configuration
+spring.datasource.url=<DB URL>  # e.g., jdbc:postgresql://localhost:5432/yourDatabase
+spring.datasource.username=<DB Username>
+spring.datasource.password=<DB Password>
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
 
+# Server Configuration
+server.servlet.context-path=/api/v1
+
+# JWT Authentication Configuration
+jwt.secretKey=<JWT Secret Key>
+
+## Finally run
 mvn clean install
 mvn spring-boot:run
+
+```
+## The application will be available at http://localhost:8080/.
+
+
 
 
