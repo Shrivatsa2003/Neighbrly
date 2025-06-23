@@ -205,6 +205,11 @@ server.servlet.context-path=/api/v1
 # JWT Authentication Configuration
 jwt.secretKey=<JWT Secret Key>
 
+
+# Stripe Configuration
+stripe.secret.key=${STRIPE_SECRET_KEY}
+stripe.webhook.secret=${STRIPE_WEBHOOK_SECRET}
+
 ## Finally run
 mvn clean install
 mvn spring-boot:run
