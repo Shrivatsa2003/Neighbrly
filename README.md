@@ -62,7 +62,7 @@ Welcome to **Neighbrly**, a full-stack hotel booking system designed to manage e
 | Storage      | Cloudinary (for photos)    |
 
 ---
-##📊 Below is the database schema diagram illustrating the key entities and their relationships in the application. 🔗
+## 📊 Below is the database schema diagram illustrating the key entities and their relationships in the application. 🔗
 
 ![Screenshot 2025-06-23 165758](https://github.com/user-attachments/assets/2113082b-3f47-4e37-ba0d-469a277dde8a)
 
